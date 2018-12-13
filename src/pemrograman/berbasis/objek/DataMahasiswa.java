@@ -57,7 +57,6 @@ public class DataMahasiswa extends javax.swing.JFrame {
         btnSimpan = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -93,10 +92,18 @@ public class DataMahasiswa extends javax.swing.JFrame {
         });
 
         btnUbah.setText("Ubah");
+        btnUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUbahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Jenis Kelamin-", "Laki - Laki", "Perempuan" }));
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,9 +121,7 @@ public class DataMahasiswa extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rbLakiLaki)
                         .addGap(18, 18, 18)
-                        .addComponent(rbPerempuan)
-                        .addGap(41, 41, 41)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(rbPerempuan))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtNIM)
                         .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
@@ -127,7 +132,7 @@ public class DataMahasiswa extends javax.swing.JFrame {
                         .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(btnHapus)))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,8 +149,7 @@ public class DataMahasiswa extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(rbLakiLaki)
-                    .addComponent(rbPerempuan)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rbPerempuan))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -189,6 +193,42 @@ public class DataMahasiswa extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rbPerempuanActionPerformed
 
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        // TODO add your handling code here:
+        String jenis_kelamin = rbLakiLaki.isSelected()? "L":"P";
+        try {
+            Connection connect = new Koneksi().getKoneksi();
+
+            String sql = "update mahasiswa set nama=?,jenis_kelamin=?,jurusan=? where nim=?";
+            PreparedStatement statement = connect.prepareStatement(sql);
+            statement.setString(1, txtNama.getText());
+            statement.setString(2, jenis_kelamin);
+            statement.setString(3,txtJurusan.getText());
+            statement.setString(4, txtNIM.getText());
+            statement.execute();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
+            this.dispose();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        try {
+            Connection connect = new Koneksi().getKoneksi();
+
+            String sql = "delete from mahasiswa where nim=?";
+            PreparedStatement statement = connect.prepareStatement(sql);
+            statement.setString(1, txtNIM.getText());
+            statement.execute();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
+            this.dispose();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -229,7 +269,6 @@ public class DataMahasiswa extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnPilihJenisKelamin;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnUbah;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
